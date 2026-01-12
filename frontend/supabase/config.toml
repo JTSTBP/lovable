@@ -1,0 +1,16 @@
+project_id = "ivbappwxuzabhqifugtw"
+
+[functions.google-oauth-start]
+verify_jwt = false
+
+[functions.google-oauth-callback]
+verify_jwt = false
+
+[functions.unsubscribe]
+verify_jwt = false
+
+[functions.email-bounce-webhook]
+verify_jwt = false
+
+[functions.track-click]
+verify_jwt = false

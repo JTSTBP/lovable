@@ -1,0 +1,154 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum AccountProvider {
+  google
+  outlook
+  @@map("account_provider")
+}
+
+enum CampaignStatus {
+  draft
+  active
+  paused
+  completed
+  @@map("campaign_status")
+}
+
+enum LeadStatus {
+  pending
+  sent
+  opened
+  replied
+  bounced
+  unsubscribed
+  @@map("lead_status")
+}
+
+model Account {
+  id                 String          @id @default(uuid())
+  userId             String          @map("user_id")
+  email              String
+  provider           AccountProvider
+  dailyLimit         Int?            @map("daily_limit")
+  isConnected        Boolean?        @default(false) @map("is_connected")
+  accessToken        String?         @map("access_token")
+  refreshToken       String?         @map("refresh_token")
+  warmupEnabled      Boolean?        @default(false) @map("warmup_enabled")
+  warmupTargetLimit  Int?            @map("warmup_target_limit")
+  warmupCurrentLimit Int?            @map("warmup_current_limit")
+  warmupIncrement    Int?            @map("warmup_increment")
+  warmupStartDate    DateTime?       @map("warmup_start_date")
+  warmupCompleted    Boolean?        @default(false) @map("warmup_completed")
+  createdAt          DateTime        @default(now()) @map("created_at")
+  updatedAt          DateTime        @updatedAt @map("updated_at")
+
+  campaigns          Campaign[]
+
+  @@map("accounts")
+}
+
+model Campaign {
+  id                String          @id @default(uuid())
+  userId            String          @map("user_id")
+  accountId         String?         @map("account_id")
+  account           Account?        @relation(fields: [accountId], references: [id])
+  name              String
+  status            CampaignStatus? @default(draft)
+  scheduleStartHour Int?            @map("schedule_start_hour")
+  scheduleEndHour   Int?            @map("schedule_end_hour")
+  scheduledAt       DateTime?       @map("scheduled_at")
+  timezone          String?
+  dailyLimit        Int?            @map("daily_limit")
+  totalSent         Int?            @default(0) @map("total_sent")
+  totalOpened       Int?            @default(0) @map("total_opened")
+  totalReplied      Int?            @default(0) @map("total_replied")
+  createdAt         DateTime        @default(now()) @map("created_at")
+  updatedAt         DateTime        @updatedAt @map("updated_at")
+
+  steps             CampaignStep[]
+  leads             Lead[]
+
+  @@map("campaigns")
+}
+
+model CampaignStep {
+  id           String    @id @default(uuid())
+  campaignId   String    @map("campaign_id")
+  campaign     Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  stepOrder    Int       @map("step_order")
+  subject      String
+  body         String
+  backgroundImage String?  @map("background_image")
+  attachments     Json?    // Array of { name: string, url: string, size: number }
+  delayDays    Int?      @map("delay_days")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  
+  leadsAtStep  Lead[]
+
+  @@map("campaign_steps")
+  
+  variants     CampaignStepVariant[]
+}
+
+model CampaignStepVariant {
+  id           String       @id @default(uuid())
+  stepId       String       @map("step_id")
+  step         CampaignStep @relation(fields: [stepId], references: [id], onDelete: Cascade)
+  variantName  String       @map("variant_name") // "B", "C" etc
+  subject      String
+  body         String
+  backgroundImage String?  @map("background_image")
+  attachments     Json?    // Array of { name: string, url: string, size: number }
+  trafficSplit Int?         @default(50) @map("traffic_split") 
+  sentCount    Int?         @default(0) @map("sent_count")
+  
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  @@map("campaign_step_variants")
+}
+
+model Lead {
+  id               String      @id @default(uuid())
+  userId           String      @map("user_id")
+  campaignId       String?     @map("campaign_id")
+  campaign         Campaign?   @relation(fields: [campaignId], references: [id])
+  email            String      @unique
+  leadName         String?     @map("lead_name")
+  fullName         String?     @map("full_name")
+  company          String?
+  linkedinUrl      String?     @map("linkedin_url")
+  industry         String?
+  status           LeadStatus? @default(pending)
+  currentStepId    String?     @map("current_step_id")
+  currentStep      CampaignStep? @relation(fields: [currentStepId], references: [id])
+  nextStepDueAt    DateTime?   @map("next_step_due_at")
+  unsubscribeToken String?     @map("unsubscribe_token")
+  createdAt        DateTime    @default(now()) @map("created_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
+
+  @@map("leads")
+}
+
+model EmailTemplate {
+  id              String   @id @default(uuid())
+  userId          String   @map("user_id")
+  name            String
+  subject         String?
+  body            String?  @db.Text
+  backgroundImage String?  @map("background_image")
+  attachments     Json?    // Array of { name: string, url: string, size: number }
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("email_templates")
+}
+
