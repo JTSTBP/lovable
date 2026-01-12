@@ -35,6 +35,10 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
+app.get("/", (req, res) => {
+    res.send("lovable is runningg in server...");
+});
+
 
 app.use('/uploads', express.static('uploads'));
 
