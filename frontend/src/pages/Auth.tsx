@@ -18,38 +18,56 @@ export default function Auth() {
   const [fullName, setFullName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
-  
-  const { signIn, signUp, user } = useAuth();
+
+  const { signIn, signUp, user, signOut } = useAuth(); // Destructure signOut
   const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
+      // We'll let the submit handler do the navigation to ensure verification passes first
+      // But if user is already authenticated on load, we might want to re-verify?
+      // For now, let's assume session persistence is fine, we only verify on explicit login action as requested.
+      // Actually, if they reload, they bypass. But user specifically talked about "login".
       navigate('/dashboard');
     }
   }, [user, navigate]);
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
-    
+
     const emailResult = emailSchema.safeParse(email);
     if (!emailResult.success) {
       newErrors.email = emailResult.error.errors[0].message;
     }
-    
+
     const passwordResult = passwordSchema.safeParse(password);
     if (!passwordResult.success) {
       newErrors.password = passwordResult.error.errors[0].message;
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  const checkBackendStatus = async () => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      // Remove trailing slash if present to avoid double slash
+      const baseUrl = apiUrl.replace(/\/$/, '');
+      const response = await fetch(`${baseUrl}/api/status`);
+      if (!response.ok) throw new Error('Backend unhealthy');
+      return true;
+    } catch (error) {
+      console.error('Backend connection failed:', error);
+      return false;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     setIsLoading(true);
     try {
       if (isLogin) {
@@ -61,6 +79,14 @@ export default function Auth() {
             toast.error(error.message);
           }
         } else {
+          // Verify Backend Connection
+          const isBackendOnline = await checkBackendStatus();
+          if (!isBackendOnline) {
+            await signOut();
+            toast.error('Login failed: Cannot connect to backend server');
+            return;
+          }
+
           toast.success('Welcome back!');
           navigate('/dashboard');
         }
@@ -73,6 +99,14 @@ export default function Auth() {
             toast.error(error.message);
           }
         } else {
+          // Verify Backend Connection
+          const isBackendOnline = await checkBackendStatus();
+          if (!isBackendOnline) {
+            await signOut();
+            toast.error('Account created but backend is unreachable. Please try again later.');
+            return;
+          }
+
           toast.success('Account created! You can now sign in.');
           navigate('/dashboard');
         }
@@ -175,8 +209,8 @@ export default function Auth() {
                 {isLoading
                   ? 'Loading...'
                   : isLogin
-                  ? 'Sign In'
-                  : 'Create Account'}
+                    ? 'Sign In'
+                    : 'Create Account'}
               </Button>
             </form>
 

@@ -7,13 +7,8 @@ import { SaveTemplateDialog } from '@/components/campaigns/SaveTemplateDialog';
 import { LoadTemplateDialog } from '@/components/campaigns/LoadTemplateDialog';
 import { EmailPreviewDialog } from '@/components/campaigns/EmailPreviewDialog';
 import { ABTestEditor, ABVariant } from '@/components/campaigns/ABTestEditor';
-import ReactQuill from 'react-quill';
-const Quill = (ReactQuill as any).Quill;
-import 'react-quill/dist/quill.snow.css';
-import BlotFormatter from 'quill-blot-formatter';
+import { RichTextEditor } from '@/components/ui/RichTextEditor';
 import { toast } from 'sonner';
-
-Quill.register('modules/blotFormatter', BlotFormatter);
 
 export interface EmailStep {
   id: string;
@@ -415,9 +410,8 @@ export function SequencesStep({ steps, onStepsChange, userId }: SequencesStepPro
                   </div>
                 </div>
                 <div className="h-64 mb-12">
-                  <ReactQuill
+                  <RichTextEditor
                     ref={(el) => { if (el) quillRefs.current[step.id] = el; }}
-                    theme="snow"
                     value={step.body}
                     onChange={(value) => updateStep(step.id, { body: value })}
                     modules={modules}

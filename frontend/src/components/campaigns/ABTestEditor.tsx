@@ -5,8 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { EmailPreviewDialog } from '@/components/campaigns/EmailPreviewDialog';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import { RichTextEditor } from '@/components/ui/RichTextEditor';
 import { useMemo, useRef } from 'react';
 
 export interface ABVariant {
@@ -302,9 +301,8 @@ export function ABTestEditor({
                   </div>
                 </div>
                 <div className="h-56 mb-12">
-                  <ReactQuill
+                  <RichTextEditor
                     ref={(el) => { if (el) quillRefs.current[variant.id] = el; }}
-                    theme="snow"
                     value={variant.body}
                     onChange={(value) => updateVariant(variant.id, { body: value })}
                     modules={modules}

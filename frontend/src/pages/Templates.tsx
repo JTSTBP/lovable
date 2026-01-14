@@ -25,15 +25,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import BlotFormatter from 'quill-blot-formatter';
+import { RichTextEditor } from '@/components/ui/RichTextEditor';
 import { EmailPreviewDialog } from '@/components/campaigns/EmailPreviewDialog';
-
-const Quill = (ReactQuill as any).Quill;
-if (Quill && !Quill.imports['modules/blotFormatter']) {
-  Quill.register('modules/blotFormatter', BlotFormatter);
-}
 
 interface Attachment {
   name: string;
@@ -510,9 +503,8 @@ export default function Templates() {
                     </div>
                   </div>
                   <div className="flex-1 bg-muted/10 rounded-md overflow-hidden border border-input focus-within:ring-1 focus-within:ring-ring">
-                    <ReactQuill
+                    <RichTextEditor
                       ref={quillRef}
-                      theme="snow"
                       value={formData.body}
                       onChange={(val) => setFormData({ ...formData, body: val })}
                       modules={modules}
