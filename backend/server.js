@@ -266,7 +266,8 @@ app.get('/api/accounts', async (req, res) => {
         res.json(accounts);
     } catch (error) {
         console.error('💥 DATABASE ERROR:', error);
-        res.status(500).json({ error: "Failed to fetch accounts" });
+        fs.appendFileSync('backend_error.log', `[${new Date().toISOString()}] Accounts Fetch Error: ${error?.message || error}\n${error?.stack || ''}\n`);
+        res.status(500).json({ error: "Failed to fetch accounts", details: error.message });
     }
 });
 
@@ -287,6 +288,22 @@ app.delete('/api/accounts/:id', async (req, res) => {
 // Test route
 app.get('/api/status', (req, res) => {
     res.json({ status: "Online" });
+});
+
+app.get('/api/db-check', async (req, res) => {
+    try {
+        await prisma.$queryRaw`SELECT 1`;
+        res.json({ status: "Connected", message: "Database connection successful" });
+    } catch (error) {
+        console.error('💥 DB CHECK ERROR:', error);
+        fs.appendFileSync('backend_error.log', `[${new Date().toISOString()}] DB Check Failure: ${error?.message || error}\n${error?.stack || ''}\n`);
+        res.status(500).json({
+            status: "Error",
+            message: "Database connection failed",
+            error: error.message,
+            code: error.code
+        });
+    }
 });
 
 
@@ -433,7 +450,8 @@ app.post('/api/leads', async (req, res) => {
             return res.status(409).json({ error: "Lead with this email already exists" });
         }
         console.error('💥 DATABASE ERROR:', error);
-        res.status(500).json({ error: "Failed to create lead" });
+        fs.appendFileSync('backend_error.log', `[${new Date().toISOString()}] Lead Create Error: ${error?.message || error}\n${error?.stack || ''}\n`);
+        res.status(500).json({ error: "Failed to create lead", details: error.message });
     }
 });
 
@@ -452,7 +470,8 @@ app.get('/api/leads', async (req, res) => {
         res.json(leads);
     } catch (error) {
         console.error('💥 DATABASE ERROR:', error);
-        res.status(500).json({ error: "Failed to fetch leads" });
+        fs.appendFileSync('backend_error.log', `[${new Date().toISOString()}] Leads Fetch Error: ${error?.message || error}\n${error?.stack || ''}\n`);
+        res.status(500).json({ error: "Failed to fetch leads", details: error.message });
     }
 });
 
@@ -597,7 +616,8 @@ app.post('/api/campaigns', async (req, res) => {
         res.json(campaign);
     } catch (error) {
         console.error('💥 DATABASE ERROR:', error);
-        res.status(500).json({ error: "Failed to create campaign" });
+        fs.appendFileSync('backend_error.log', `[${new Date().toISOString()}] Campaign Create Error: ${error?.message || error}\n${error?.stack || ''}\n`);
+        res.status(500).json({ error: "Failed to create campaign", details: error.message });
     }
 });
 
