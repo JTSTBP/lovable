@@ -1,0 +1,62 @@
+[
+  {
+    "column_name": "id",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "column_name": "name",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "column_name": "email",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "column_name": "password",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "column_name": "role",
+    "is_nullable": "NO",
+    "column_default": "'User'::text"
+  },
+  {
+    "column_name": "app_password",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "column_name": "status",
+    "is_nullable": "NO",
+    "column_default": "'Active'::text"
+  },
+  {
+    "column_name": "phone",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "column_name": "last_login",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "column_name": "last_logout",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "column_name": "created_at",
+    "is_nullable": "NO",
+    "column_default": "CURRENT_TIMESTAMP"
+  },
+  {
+    "column_name": "updated_at",
+    "is_nullable": "NO",
+    "column_default": null
+  }
+]

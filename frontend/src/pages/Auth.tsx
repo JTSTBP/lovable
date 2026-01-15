@@ -19,15 +19,11 @@ export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
-  const { signIn, signUp, user, signOut } = useAuth(); // Destructure signOut
+  const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
-      // We'll let the submit handler do the navigation to ensure verification passes first
-      // But if user is already authenticated on load, we might want to re-verify?
-      // For now, let's assume session persistence is fine, we only verify on explicit login action as requested.
-      // Actually, if they reload, they bypass. But user specifically talked about "login".
       navigate('/dashboard');
     }
   }, [user, navigate]);
@@ -49,20 +45,6 @@ export default function Auth() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const checkBackendStatus = async () => {
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL || '';
-      // Remove trailing slash if present to avoid double slash
-      const baseUrl = apiUrl.replace(/\/$/, '');
-      const response = await fetch(`${baseUrl}/api/status`);
-      if (!response.ok) throw new Error('Backend unhealthy');
-      return true;
-    } catch (error) {
-      console.error('Backend connection failed:', error);
-      return false;
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -73,40 +55,16 @@ export default function Auth() {
       if (isLogin) {
         const { error } = await signIn(email, password);
         if (error) {
-          if (error.message.includes('Invalid login credentials')) {
-            toast.error('Invalid email or password');
-          } else {
-            toast.error(error.message);
-          }
+          toast.error(error.message);
         } else {
-          // Verify Backend Connection
-          const isBackendOnline = await checkBackendStatus();
-          if (!isBackendOnline) {
-            await signOut();
-            toast.error('Login failed: Cannot connect to backend server');
-            return;
-          }
-
           toast.success('Welcome back!');
           navigate('/dashboard');
         }
       } else {
         const { error } = await signUp(email, password, fullName);
         if (error) {
-          if (error.message.includes('already registered')) {
-            toast.error('This email is already registered. Please sign in.');
-          } else {
-            toast.error(error.message);
-          }
+          toast.error(error.message);
         } else {
-          // Verify Backend Connection
-          const isBackendOnline = await checkBackendStatus();
-          if (!isBackendOnline) {
-            await signOut();
-            toast.error('Account created but backend is unreachable. Please try again later.');
-            return;
-          }
-
           toast.success('Account created! You can now sign in.');
           navigate('/dashboard');
         }

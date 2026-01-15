@@ -37,31 +37,95 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string, fullName?: string) => {
-    const redirectUrl = `${window.location.origin}/`;
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, fullName })
+      });
+      const contentType = response.headers.get('content-type');
+      const data = contentType && contentType.includes('application/json')
+        ? await response.json()
+        : await response.text();
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          full_name: fullName,
-        },
-      },
-    });
-    return { error };
+      console.log('Signup response:', data);
+      if (!response.ok) {
+        const errorMsg = data.error || (typeof data === 'string' ? data : JSON.stringify(data));
+        return { error: new Error(errorMsg) };
+      }
+
+      const { error } = await supabase.auth.setSession({
+        access_token: data.access_token,
+        refresh_token: data.refresh_token
+      });
+
+      return { error };
+    } catch (err: any) {
+      return { error: err instanceof Error ? err : new Error(String(err)) };
+    }
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { error };
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const contentType = response.headers.get('content-type');
+      const data = contentType && contentType.includes('application/json')
+        ? await response.json()
+        : await response.text();
+
+      console.log('Login response:', data);
+      if (!response.ok) {
+        const errorMsg = data.error || (typeof data === 'string' ? data : JSON.stringify(data));
+        return { error: new Error(errorMsg) };
+      }
+
+      // Manually set session in Supabase client to trigger onAuthStateChange
+      const { error } = await supabase.auth.setSession({
+        access_token: data.access_token,
+        refresh_token: data.refresh_token
+      });
+
+      return { error };
+    } catch (err: any) {
+      return { error: err instanceof Error ? err : new Error(String(err)) };
+    }
   };
 
+  const [isSignoutInProgress, setIsSignoutInProgress] = useState(false);
+
   const signOut = async () => {
-    await supabase.auth.signOut();
+    if (isSignoutInProgress) return;
+    setIsSignoutInProgress(true);
+
+    try {
+      if (session?.access_token) {
+        await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`
+          }
+        });
+      }
+    } catch (err) {
+      console.error('Logout proxy error:', err);
+    } finally {
+      // Instead of supabase.auth.signOut which still makes a network request in some versions,
+      // we manually clear the session from localStorage and reset React state.
+      const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID || 'ivbappwxuzabhqifugtw';
+      const storageKey = `sb-${projectId}-auth-token`;
+
+      localStorage.removeItem(storageKey);
+      setSession(null);
+      setUser(null);
+      setIsSignoutInProgress(false);
+
+      // Optional: force a refresh of auth state if needed, but manual state reset above is faster
+      console.log('Local logout completed, storage cleared.');
+    }
   };
 
   return (

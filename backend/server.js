@@ -15,7 +15,14 @@ const prisma = new PrismaClient();
 const port = process.env.PORT || 3000;
 
 app.use(cors({
-    origin: process.env.FRONTEND_URL
+    origin: [
+        "http://localhost:8080",
+        "http://localhost:5173",
+        "http://localhost:4173",
+        "https://jobsterritory.in",
+        process.env.FRONTEND_URL
+    ].filter(Boolean),
+    credentials: true
 }));
 app.use(express.json());
 
@@ -53,6 +60,95 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
     const url = `${baseUrl}/uploads/${req.file.filename}`;
 
     res.json({ url });
+});
+// ---------------------
+
+// --- AUTH PROXY ROUTES ---
+// Login Proxy
+app.post('/api/auth/login', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const response = await fetch(`${process.env.SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': process.env.SUPABASE_PUBLISHABLE_KEY
+            },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            console.error('Login Proxy Error (Supabase):', data);
+            // Thoroughly check for any potential error message from Supabase
+            const message = data.error_description || data.message || data.msg || data.error || (data.code ? `Supabase error: ${data.code}` : 'Invalid login credentials');
+            return res.status(response.status).json({ success: false, error: message, code: data.code });
+        }
+        res.json({ success: true, ...data });
+    } catch (error) {
+        console.error('Login Proxy Error (Internal):', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error', message: error.message });
+    }
+});
+
+// Signup Proxy
+app.post('/api/auth/signup', async (req, res) => {
+    const { email, password, fullName } = req.body;
+    try {
+        const response = await fetch(`${process.env.SUPABASE_URL}/auth/v1/signup`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': process.env.SUPABASE_PUBLISHABLE_KEY
+            },
+            body: JSON.stringify({
+                email,
+                password,
+                data: { full_name: fullName }
+            })
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            console.error('Signup Proxy Error (Supabase):', data);
+            const message = data.error_description || data.message || data.msg || data.error || (data.code ? `Supabase error: ${data.code}` : 'Sign up failed');
+            return res.status(response.status).json({ success: false, error: message, code: data.code });
+        }
+        res.json({ success: true, ...data });
+    } catch (error) {
+        console.error('Signup Proxy Error (Internal):', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error', message: error.message });
+    }
+});
+
+// Logout Proxy
+app.post('/api/auth/logout', async (req, res) => {
+    const authHeader = req.headers.authorization;
+    try {
+        const response = await fetch(`${process.env.SUPABASE_URL}/auth/v1/logout?scope=global`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': process.env.SUPABASE_PUBLISHABLE_KEY,
+                'Authorization': authHeader
+            }
+        });
+        if (!response.ok) {
+            const data = await response.json();
+
+            // If session is not found or it's a 403 session error, the user is effectively logged out
+            if (response.status === 403 && (data.error_code === 'session_not_found' || data.msg?.includes('session_id claim'))) {
+                console.log('Session already gone, treating logout as success.');
+                return res.json({ success: true, message: 'Logged out successfully' });
+            }
+
+            console.error('Logout Proxy Error (Supabase):', data);
+            const message = data.error_description || data.message || data.msg || data.error || (data.code ? `Supabase error: ${data.code}` : 'Logout failed');
+            return res.status(response.status).json({ success: false, error: message, code: data.code });
+        }
+        res.json({ success: true, message: 'Logged out successfully' });
+    } catch (error) {
+        console.error('Logout Proxy Error (Internal):', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error', message: error.message });
+    }
 });
 // ---------------------
 
