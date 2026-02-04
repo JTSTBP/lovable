@@ -43,3 +43,107 @@ Please make sure your database server is running at `ep-solitary-king-a1vf1idu-p
 [2026-01-10T12:44:55.766Z] Failed to send to gayathrigottemukkala@gmail.com: Request had insufficient authentication scopes.
 [2026-01-10T12:45:06.107Z] Failed to send to gayathrigottemukkala123@gmail.com: Failed to refresh Gmail authentication. Account has been disconnected. Please reconnect.
 [2026-01-10T12:45:09.780Z] Failed to send to gayathrigottemukkala@gmail.com: Request had insufficient authentication scopes.
+[2026-02-04T05:48:52.572Z] Accounts Fetch Error: 
+Invalid `prisma.account.findMany()` invocation:
+
+
+Can't reach database server at `ep-solitary-king-a1vf1idu-pooler.ap-southeast-1.aws.neon.tech:5432`
+
+Please make sure your database server is running at `ep-solitary-king-a1vf1idu-pooler.ap-southeast-1.aws.neon.tech:5432`.
+PrismaClientKnownRequestError: 
+Invalid `prisma.account.findMany()` invocation:
+
+
+Can't reach database server at `ep-solitary-king-a1vf1idu-pooler.ap-southeast-1.aws.neon.tech:5432`
+
+Please make sure your database server is running at `ep-solitary-king-a1vf1idu-pooler.ap-southeast-1.aws.neon.tech:5432`.
+    at ei.handleRequestError (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:7268)
+    at ei.handleAndLogRequestError (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:6593)
+    at ei.request (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:6300)
+    at async a (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:130:9551)
+    at async file:///C:/MyProjects/OfficeProjects/bluebird-campaigner-main/backend/server.js:260:26
+[2026-02-04T06:22:34.355Z] Accounts Fetch Error: 
+Invalid `prisma.account.findMany()` invocation:
+
+
+Engine is not yet connected.
+Backtrace [{ fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "BaseThreadInitThunk" }, { fn: "RtlUserThreadStart" }]
+PrismaClientUnknownRequestError: 
+Invalid `prisma.account.findMany()` invocation:
+
+
+Engine is not yet connected.
+Backtrace [{ fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "BaseThreadInitThunk" }, { fn: "RtlUserThreadStart" }]
+    at ei.handleRequestError (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:7458)
+    at ei.handleAndLogRequestError (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:6593)
+    at ei.request (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:6300)
+    at async a (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:130:9551)
+    at async file:///C:/MyProjects/OfficeProjects/bluebird-campaigner-main/backend/server.js:260:26
+[2026-02-04T06:22:34.496Z] Accounts Fetch Error: 
+Invalid `prisma.account.findMany()` invocation:
+
+
+Engine is not yet connected.
+Backtrace [{ fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "BaseThreadInitThunk" }, { fn: "RtlUserThreadStart" }]
+PrismaClientUnknownRequestError: 
+Invalid `prisma.account.findMany()` invocation:
+
+
+Engine is not yet connected.
+Backtrace [{ fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "BaseThreadInitThunk" }, { fn: "RtlUserThreadStart" }]
+    at ei.handleRequestError (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:7458)
+    at ei.handleAndLogRequestError (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:6593)
+    at ei.request (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:6300)
+    at async a (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:130:9551)
+    at async file:///C:/MyProjects/OfficeProjects/bluebird-campaigner-main/backend/server.js:260:26
+[2026-02-04T06:22:34.749Z] Accounts Fetch Error: 
+Invalid `prisma.account.findMany()` invocation:
+
+
+Engine is not yet connected.
+Backtrace [{ fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "BaseThreadInitThunk" }, { fn: "RtlUserThreadStart" }]
+PrismaClientUnknownRequestError: 
+Invalid `prisma.account.findMany()` invocation:
+
+
+Engine is not yet connected.
+Backtrace [{ fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "BaseThreadInitThunk" }, { fn: "RtlUserThreadStart" }]
+    at ei.handleRequestError (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:7458)
+    at ei.handleAndLogRequestError (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:6593)
+    at ei.request (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:6300)
+    at async a (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:130:9551)
+    at async file:///C:/MyProjects/OfficeProjects/bluebird-campaigner-main/backend/server.js:260:26
+[2026-02-04T06:22:34.764Z] Accounts Fetch Error: 
+Invalid `prisma.account.findMany()` invocation:
+
+
+Engine is not yet connected.
+Backtrace [{ fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "BaseThreadInitThunk" }, { fn: "RtlUserThreadStart" }]
+PrismaClientUnknownRequestError: 
+Invalid `prisma.account.findMany()` invocation:
+
+
+Engine is not yet connected.
+Backtrace [{ fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "BaseThreadInitThunk" }, { fn: "RtlUserThreadStart" }]
+    at ei.handleRequestError (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:7458)
+    at ei.handleAndLogRequestError (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:6593)
+    at ei.request (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:6300)
+    at async a (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:130:9551)
+    at async file:///C:/MyProjects/OfficeProjects/bluebird-campaigner-main/backend/server.js:260:26
+[2026-02-04T06:22:35.283Z] Accounts Fetch Error: 
+Invalid `prisma.account.findMany()` invocation:
+
+
+Engine is not yet connected.
+Backtrace [{ fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "BaseThreadInitThunk" }, { fn: "RtlUserThreadStart" }]
+PrismaClientUnknownRequestError: 
+Invalid `prisma.account.findMany()` invocation:
+
+
+Engine is not yet connected.
+Backtrace [{ fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "napi_register_module_v1" }, { fn: "BaseThreadInitThunk" }, { fn: "RtlUserThreadStart" }]
+    at ei.handleRequestError (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:7458)
+    at ei.handleAndLogRequestError (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:6593)
+    at ei.request (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:121:6300)
+    at async a (C:\MyProjects\OfficeProjects\bluebird-campaigner-main\backend\node_modules\@prisma\client\runtime\library.js:130:9551)
+    at async file:///C:/MyProjects/OfficeProjects/bluebird-campaigner-main/backend/server.js:260:26
